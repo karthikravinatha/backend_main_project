@@ -26,15 +26,6 @@ from WOLFPACKAPP.Base.helper import JWTManager
 from datetime import datetime, timezone, timedelta
 
 
-def excel_extract(request: HttpRequest):
-    data = Users.objects.raw("SELECT id,name,email,phone_no,password,role_id FROM WOLFPACKAPP_user")
-    # res = json.dumps(data)
-    # cursor = connections['default'].cursor()
-    # cursor.execute("INSERT INTO WOLFPACKAPP_user(name,email,phone_no,password,role_id,reporting_to,created_on,created_by) VALUES(%s,%s,%s,%s,%s,%s,%s,%s)",["SaiKarthik","saikarthik@deloitte.com","9611798835","Karthik1234",1,3,"01/01/2021 09:00",5])
-    for each in data:
-        print(each.id, each.name, each.email)
-    # print(data.columns,data)    
-    return HttpResponse("hello")
 
 def authenticate(request:HttpRequest):
     if request.method == "GET":
@@ -182,7 +173,7 @@ def get_user(request:HttpRequest):
             cursor = connections['default'].cursor()
             # date_format(Invoice_Date, '%d/%m/%Y')
             cursor.execute(
-                "SELECT user_id,name,email,phone_no,password,role_id,reporting_to,strftime('%Y/%m/%d','created_on'),created_by FROM WOLFPACKAPP_users")
+                "SELECT user_id,name,email,phone_no,password,role_id,reporting_to,'created_on',created_by FROM wolfpackapp_users")
                 # [user_object.name, user_object.email, user_object.role_id,
                 #     user_object.reporting_to, user_object.created_on, user_object.created_by, user_object.user_id])        
             s = cursor.fetchall()
@@ -284,21 +275,26 @@ def project_update(request:HttpRequest):
         project_object.managed_by,
         project_object.last_modified_by,
         project_object.last_modified_on,
-        project_object.status_id,project_object.project_id])
+        project_object.status_id,
+        project_object.project_id])
 
+        
         issues = project_dict.get("issues")
         issue_detail = []
-        if len(issues) > 0:
-            if issues is not None:
-                for each in issues:
-                    cursor = connections['default'].cursor()
-                    s = cursor.execute(
-                    "UPDATE WOLFPACKAPP_issuesdetail SET issues_idd=%s,asignee_id=%s,status_id,priority=%s,target_resolution_date=%s,target_resolution_summary=%s,created_on=%s,created_by=%s,comment_id=%s,lable_id=%s WHERE issue_id=%s AND project_id=%s",
-                    [each["issues_idd"],each['asignee_id'],each['status_id'],each['priority'],
-                    each['target_resolution_date'],each['target_resolution_summary'],
-                    each['created_on'],each['created_by'],each['comment_id'],each['label_id'],
-                    each['issue_id'],project_object.project_id])
-                    issue_detail.append(each)
+        if len(issues) > 0:            
+            for each in issues:
+                print("1staa")
+                cursor = connections['default'].cursor()
+                cursor.execute(
+                "UPDATE WOLFPACKAPP_issuesdetail SET issues_idd=%s,asignee_id=%s,status_id=%s,lable_id=%s WHERE issue_id=%s AND project_id=%s",
+                [each["issues_idd"],
+                each['asignee_id'],
+                each['status_id'],
+                each['label_id'],
+                each['issue_id'],
+                project_object.project_id])
+                
+                issue_detail.append(each)
         temp["project_id"] = project_object.project_id
         temp["project_name"] = project_object.project_name
         temp["created_by"] = project_object.created_by
@@ -309,7 +305,7 @@ def project_update(request:HttpRequest):
         temp["last_modified_by"] = project_object.last_modified_by
         temp["last_modified_on"] = project_object.last_modified_on
         temp["status_id"] = project_object.status_id
-        temp['project_id'] = id.project_id
+        temp['project_id'] = project_object.project_id
         temp['issues'] = issue_detail
     except Exception as ex:
         raise ex
@@ -320,20 +316,20 @@ def project_delete(request:HttpRequest):
     temp = {}
     project_dict = json.loads(request.POST.get("project_object"))
     project_object.project_id = project_dict.get("project_id")
-    is_delete_project = project_object.get("is_delete_project")
+    is_delete_project = project_dict.get("is_delete_project")
     issues = project_dict.get("issues")
     issue_detail = []
-    issue_object: IssuesDetail = IssuesDetail()
+    # issue_object: IssuesDetail = IssuesDetail()
     if issues is not None:
         if len(issues) > 0:
             for each in issues:
                 if each['issue_id'] is not None:
-                    issue_object.issue_id = each['issue_id']
+                    # issues["issue_id"] = each['issue_id']
                     try:
                         cursor = connections['default'].cursor()
                         s = cursor.execute(
                         "DELETE FROM WOLFPACKAPP_issuesdetail WHERE issue_id=%s AND project_id=%s",
-                        [issue_object.issue_id,project_object.project_id])
+                        [each['issue_id'],project_object.project_id])
                     except Exception as ex:
                         raise ex
                 else:
@@ -352,7 +348,7 @@ def project_delete(request:HttpRequest):
         try:
             cursor = connections['default'].cursor()
             s = cursor.execute(
-            "DELETE FROM WOLFPACKAPP_issuesheader WHERE project_id=%s",
+            "DELETE FROM WOLFPACKAPP_projectheader WHERE project_id=%s",
             [project_object.project_id])
         except Exception as ex:
             raise ex

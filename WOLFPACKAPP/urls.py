@@ -6,8 +6,7 @@ from . import url_mapping
 urlpatterns = [
     path('auth', views.authenticate, name='authe'),
     path('session', views.check_session, name='check session'),
-
-    path('extract', views.excel_extract, name='index'),
+    
     path('uadd', views.add_user, name='user-add'),
     path('uupdate', views.update_user, name='user-update'),
     path('uget', views.get_user, name='user-get'),
@@ -20,7 +19,6 @@ urlpatterns = [
     path('sadd', views.sprint_add, name='sprint-add'),
     path('sdelete', views.sprint_delete, name='sprint-delete'),
     path('sgetlist', views.get_sprint_list, name='sprint-getlist'),
-    # path('extract1', url_mapping.add, name='index'),
 
     path('wadd', views.add_watcher, name='add-watchers'),
 
