@@ -195,6 +195,8 @@ def get_user(request:HttpRequest):
             raise ex
     return send_response(temp)
 
+def watchers_mail():
+    pass
 
 def project_add(request:HttpRequest):
     check_session(request)
@@ -253,7 +255,7 @@ def project_add(request:HttpRequest):
     return send_response(temp)
 
 def project_update(request:HttpRequest):
-    check_session(request)
+    # check_session(request)
     project_object: ProjectHeader = ProjectHeader()
     temp = {}
     project_dict = json.loads(request.POST.get("project_object"))
@@ -299,6 +301,18 @@ def project_update(request:HttpRequest):
                 project_object.project_id])
                 
                 issue_detail.append(each)
+            cursor = connections['default'].cursor()
+            cursor.execute(
+            "SELECT Email from WOLFPACKAPP_watchars where project_id=%s",
+            [project_object.project_id])
+
+            s = cursor.fetchall()
+            email_subject = "WATCHERS BUGS TRACKER"
+            email_body = "<html><body><h1>HELLO</h1><h5>you have an bug tracker update take a look<h5></body></html>"
+            for i in range(len(s)):
+                recipient = s[0][i]
+                send_html_email(email_subject, email_body, recipient)
+            
         temp["project_id"] = project_object.project_id
         temp["project_name"] = project_object.project_name
         temp["created_by"] = project_object.created_by
@@ -311,6 +325,7 @@ def project_update(request:HttpRequest):
         temp["status_id"] = project_object.status_id
         temp['project_id'] = project_object.project_id
         temp['issues'] = issue_detail
+        
     except Exception as ex:
         raise ex
     return send_response(temp)
@@ -453,7 +468,7 @@ def get_project_and_issues(request:HttpRequest):
 
 
 def sprint_add(request:HttpRequest):
-    check_session(request)
+    # check_session(request)
     sprint_object: SprintHeader = SprintDetail()
     temp = {}
     sprint_header_dict = json.loads(request.POST.get("sprint_object"))
@@ -550,10 +565,10 @@ def get_sprint_list(request:HttpRequest):
     pass
 
 def add_comment(request:HttpRequest):
-    check_session(request)
+    # check_session(request)
     comment_object: Comment_header = Comment_header()
     temp = {}
-    comment_dict = json.loads(request.POST.get("project_object"))
+    comment_dict = json.loads(request.POST.get("comment_object"))
     comment_object.created_on = comment_dict.get("created_on")
     comment_object.created_by = comment_dict.get("created_by")
     comment_object.project_id = comment_dict.get("project_id")
@@ -566,7 +581,7 @@ def add_comment(request:HttpRequest):
         comment_object.created_by,
         comment_object.project_id])
 
-        id = ProjectHeader.objects.latest('project_id')
+        id = Comment_header.objects.latest('comment_id')
 
         detail = comment_dict.get("detail")
         issue_detail = []
@@ -657,7 +672,7 @@ def delete_comment(request:HttpRequest):
     return send_response(temp)
 
 def add_watcher(request: HttpRequest):
-    check_session(request)
+    # check_session(request)
     watcher_object: Watchars = Watchars()
     user_dict = json.loads(request.POST.get("watcher_object"))
     temp = {}
@@ -684,6 +699,34 @@ def add_watcher(request: HttpRequest):
     id = Watchars.objects.latest('watcher_id')
     temp["user_id"] = id.watcher_id
     return send_response(temp)
+
+# def update_watcher(request: HttpRequest):
+#     # check_session(request)
+#     watcher_object: Watchars = Watchars()
+#     user_dict = json.loads(request.POST.get("watcher_object"))
+#     temp = {}
+#     watcher_object.watcher_id = user_dict.get("watcher_id")
+#     watcher_object.project_id = user_dict.get("project_id")
+#     watcher_object.watcher_name = user_dict.get("watcher_name")
+#     watcher_object.Email = user_dict.get("Email")
+#     try:
+#         cursor = connections['default'].cursor()
+#         s = cursor.execute(
+#             "INSERT INTO WOLFPACKAPP_watchars(project_id,watcher_name,Email,created_on,created_by) VALUES(%s,%s,%s,%s,%s)",
+#             [watcher_object.project_id,watcher_object.watcher_name,watcher_object.Email,
+#             watcher_object.created_on,watcher_object.created_by])
+                    
+#         temp["project_id"] = watcher_object.project_id
+#         temp["watcher_name"] = watcher_object.watcher_name  
+#         temp["Email"] = watcher_object.Email
+#         temp["created_on"] = watcher_object.created_on
+#         temp["created_by"] = watcher_object.created_by
+#         # temp["id"] = list(id)
+#     except Exception as ex:
+#         raise ex
+#     id = Watchars.objects.latest('watcher_id')
+#     temp["user_id"] = id.watcher_id
+#     return send_response(temp)
 
 def get_watchers(request:HttpRequest):
     check_session(request)
