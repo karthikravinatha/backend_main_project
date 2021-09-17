@@ -26,7 +26,7 @@ from WOLFPACKAPP.Base.helper import JWTManager
 from datetime import datetime, timezone, timedelta
 
 
-
+#this is for authentication
 def authenticate(request:HttpRequest):
     if request.method == "GET":
         params = {"phone_no":request.GET.get("phone_no",0),
@@ -97,7 +97,7 @@ def convert_to_dict(obj):
     return obj.__dict__
 
 def add_user(request: HttpRequest):
-        # check_session(request)
+        check_session(request)
         user_object: Users = Users()
         user_dict = json.loads(request.POST.get("user_object"))
         temp = {}
@@ -132,6 +132,7 @@ def add_user(request: HttpRequest):
         return send_response(temp)
 
 def update_user(request:HttpRequest):
+    check_session(request)
     user_object: Users = Users()
     user_dict = json.loads(request.POST.get("user_object"))
     temp = {}
@@ -164,6 +165,7 @@ def update_user(request:HttpRequest):
     return send_response(temp)
 
 def get_user(request:HttpRequest):
+    check_session(request)
     if request.method == "GET":
         user_object: Users = Users()
         params = {"id":request.GET.get("id","")}
@@ -195,6 +197,7 @@ def get_user(request:HttpRequest):
 
 
 def project_add(request:HttpRequest):
+    check_session(request)
     project_object: ProjectHeader = ProjectHeader()
     temp = {}
     project_dict = json.loads(request.POST.get("project_object"))
@@ -250,6 +253,7 @@ def project_add(request:HttpRequest):
     return send_response(temp)
 
 def project_update(request:HttpRequest):
+    check_session(request)
     project_object: ProjectHeader = ProjectHeader()
     temp = {}
     project_dict = json.loads(request.POST.get("project_object"))
@@ -312,6 +316,7 @@ def project_update(request:HttpRequest):
     return send_response(temp)
 
 def project_delete(request:HttpRequest):
+    check_session(request)
     project_object: ProjectHeader = ProjectHeader()    
     temp = {}
     project_dict = json.loads(request.POST.get("project_object"))
@@ -357,6 +362,7 @@ def project_delete(request:HttpRequest):
     return send_response(temp)
 
 def get_project_and_issues(request:HttpRequest):
+    check_session(request)
     if request.method == "GET":
         params = {"project_id":request.GET.get("project_id",0)}
         temp = []
@@ -447,6 +453,7 @@ def get_project_and_issues(request:HttpRequest):
 
 
 def sprint_add(request:HttpRequest):
+    check_session(request)
     sprint_object: SprintHeader = SprintDetail()
     temp = {}
     sprint_header_dict = json.loads(request.POST.get("sprint_object"))
@@ -497,6 +504,7 @@ def sprint_add(request:HttpRequest):
 
 
 def sprint_delete(request:HttpRequest):
+    check_session(request)
     sprint_object: SprintHeader = SprintHeader()    
     temp = {}
     sprint_dict = json.loads(request.POST.get("sprint_object"))
@@ -542,6 +550,7 @@ def get_sprint_list(request:HttpRequest):
     pass
 
 def add_comment(request:HttpRequest):
+    check_session(request)
     comment_object: Comment_header = Comment_header()
     temp = {}
     comment_dict = json.loads(request.POST.get("project_object"))
@@ -579,6 +588,7 @@ def add_comment(request:HttpRequest):
     return send_response(temp)
 
 def update_comment(request:HttpRequest):
+    check_session(request)
     comment_object: Comment_header = Comment_header()
     temp = {}
     comment_dict = json.loads(request.POST.get("project_object"))
@@ -604,6 +614,7 @@ def update_comment(request:HttpRequest):
     return send_response(temp)
 
 def delete_comment(request:HttpRequest):
+    check_session(request)
     comment_object: Comment_header = Comment_header()    
     temp = {}
     comment_dict = json.loads(request.POST.get("comment_object"))
@@ -646,7 +657,7 @@ def delete_comment(request:HttpRequest):
     return send_response(temp)
 
 def add_watcher(request: HttpRequest):
-    # check_session(request)
+    check_session(request)
     watcher_object: Watchars = Watchars()
     user_dict = json.loads(request.POST.get("watcher_object"))
     temp = {}
@@ -675,6 +686,7 @@ def add_watcher(request: HttpRequest):
     return send_response(temp)
 
 def get_watchers(request:HttpRequest):
+    check_session(request)
     if request.method == "GET":
         watcher_object: Watchars = Watchars()
         params = {"id":request.GET.get("id","")}
