@@ -1,0 +1,126 @@
+user add
+{
+  "name": "siri",
+  "email": "karthikravinatha@gmail.com",
+  "phone_no": "9611798835",
+  "password": "siri1234",
+  "role_id": 3,
+  "reporting_to": 1,
+  "created_on": "21/11/2020 09:55",
+  "created_by": 1
+}
+
+user update
+
+{
+  "user_id": 1,
+  "name": "Karthik",
+  "email": "karthik@gmail.com",
+  "role_id": 3,
+  "reporting_to": 9,
+  "created_on": "15/09/2021 09:55",
+  "created_by": 1
+}
+
+user get
+
+127.0.0.1:8000/api/uget
+
+project add
+{
+  "project_name": "Deloitte Project",
+  "created_by": 10,
+  "created_on": "21/11/2020 09:21",
+  "start_date": "01/10/2021",
+  "end_date": "21/11/2021",
+  "managed_by": 3,
+  "last_modified_by": 1,
+  "last_modified_on": "21/11/2020 09:21",
+  "status_id": 1,
+  "issues": [
+    {
+      "asignee_id": 1,
+      "status_id": 1,
+      "issues_idd": 1,
+      "priority": "High",
+      "target_resolution_date": "30/12/2021",
+      "target_resolution_summary": "target_resolution_summary",
+      "created_on": "23/05/2020",
+      "created_by": 12,
+      "comment_id": 1,
+      "label_id": 1
+    },
+    {
+      "asignee_id": 2,
+      "status_id": 1,
+      "issues_idd": 1,
+      "priority": "High",
+      "target_resolution_date": "30/12/2021",
+      "target_resolution_summary": "target_resolution_summary",
+      "created_on": "23/05/2020",
+      "created_by": 13,
+      "comment_id": 1,
+      "label_id": 1
+    }
+  ]
+}
+
+project_update
+{
+  "project_id": 1,
+  "project_name": "Deloitte Project",
+  "created_by": 10,
+  "created_on": "21/11/2020 09:21",
+  "start_date": "01/10/2021",
+  "end_date": "21/11/2021",
+  "managed_by": 3,
+  "last_modified_by": 1,
+  "last_modified_on": "21/11/2020 09:21",
+  "status_id": 1,
+  "issues": [
+    {
+      "issue_id": 1,
+      "asignee_id": 1,
+      "status_id": 1,
+      "issues_idd": 1,
+      "priority": "High",
+      "target_resolution_date": "30/12/2021",
+      "target_resolution_summary": "target_resolution_summary",
+      "created_on": "23/05/2020",
+      "created_by": 12,
+      "comment_id": 1,
+      "label_id": 1
+    },
+    {
+      "issue_id": 2,
+      "asignee_id": 2,
+      "status_id": 1,
+      "issues_idd": 1,
+      "priority": "High",
+      "target_resolution_date": "30/12/2021",
+      "target_resolution_summary": "target_resolution_summary",
+      "created_on": "23/05/2020",
+      "created_by": 13,
+      "comment_id": 1,
+      "label_id": 1
+    }
+  ]
+}
+
+proj delete
+
+{
+  "project_id": 1,
+  "is_delete_project": 1,
+  "issues": [
+    {
+      "issue_id": 1
+    },
+    {
+      "issue_id": 2
+    }
+  ]
+}
+
+project get
+127.0.0.1:8000/api/pigetlist?project_id=5
