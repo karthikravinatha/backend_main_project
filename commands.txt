@@ -3,9 +3,18 @@ docker run --publish 8000:8000 python-django
 
 docker-compose build
 docker-compose run --rm app django-admin startproject projectname
+-it -> interactive terminal mode
 
+docker-compose build
 docker compose up
 docker exec -it django_container /bin/bash
--it -> interactive terminal mode
+
+
+cron job cmd for mails
+crontab -e
+0 22 * * * curl 127.0.0.1:8000/api/dailymail
+
+
+
 
 
